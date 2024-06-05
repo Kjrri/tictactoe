@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tic Tac Toe</title>
+	<style>
+		.tic-tac-toe {
+			width: 300px;
+			margin: 40px auto;
+			font-size: 24px;
+		}
+		
+		.board {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			grid-gap: 10px;
+		}
+		
+		.square {
+			background-color: #fff;
+			padding: 20px;
+			border: 1px solid #ddd;
+			cursor: pointer;
+		}
+		
+		.square:hover {
+			background-color: #ccc;
+		}
+		
+		.square:X {
+			background-color: #ff0000;
+		}
+		
+		.square:O {
+			background-color: #00ff00;
+		}
+		
+		.turn {
+			font-size: 24px;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="tic-tac-toe">
+		<div class="turn"></div>
+		<div class="board">
+			<div class="square" id="square1">&nbsp;</div>
+			<div class="square" id="square2">&nbsp;</div>
+			<div class="square" id="square3">&nbsp;</div>
+			<div class="square" id="square4">&nbsp;</div>
+			<div class="square" id="square5">&nbsp;</div>
+			<div class="square" id="square6">&nbsp;</div>
+			<div class="square" id="square7">&nbsp;</div>
+			<div class="square" id="square8">&nbsp;</div>
+			<div class="square" id="square9">&nbsp;</div>
+		</div>
+	</div>
+	
+	<script>
+		let board = [];
+		let currentPlayer = "X";
+		let moveCount = 0;
+		
+		// Initialize board
+		for (let i = 1; i <= 9; i++) {
+			board[i] = "";
+		}
+		
+		// Update turn display
+		function updateTurnDisplay() {
+			document.querySelector(".turn").innerText = `It's ${currentPlayer}'s turn`;
+		}
+		
+		updateTurnDisplay();
+		
+		// Add event listeners to squares
+		document.querySelectorAll(".square").forEach((square) => {
+			square.addEventListener("click", (e) => {
+				let id = e.target.id.replace("square", "");
+				if (board[id] === "") {
+					board[id] = currentPlayer;
+					e.target.innerText = currentPlayer;
+					moveCount++;
+					checkWin();
+					currentPlayer = currentPlayer === "X" ? "O" : "X";
+					updateTurnDisplay();
+				}
+			});
+		});
+		
+		// Check for win
+		function checkWin() {
+			let winConditions = [
+				[1, 2, 3],
+				[4, 5, 6],
+				[7, 8, 9],
+				[1, 4, 7],
+				[2, 5, 8],
+				[3, 6, 9],
+				[1, 5, 9],
+				[3, 5, 7],
+			];
+			
+			for (let i = 0; i < winConditions.length; i++) {
+				let condition = winConditions[i];
+				if (
+					board[condition[0]] === currentPlayer &&
+					board[condition[1]] === currentPlayer &&
+					board[condition[2]] === currentPlayer
+				) {
+					alert(`Player ${currentPlayer} wins!`);
+				}
+			}
+			
+			// Check for draw
+			if (moveCount === 9) {
+				alert("It's a draw!");
+			}
+		}
+	</script>
+</body>
+</html>
